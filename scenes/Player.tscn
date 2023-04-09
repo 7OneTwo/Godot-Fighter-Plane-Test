@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://chb4n304yj8du"]
+
+[ext_resource type="Texture2D" uid="uid://dxjvgq78gc5mw" path="res://assets/images/player.png" id="1_pp61f"]
+
+[node name="Area2D" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 623.0
+offset_bottom = 220.0
+scale = Vector2(0.33, 0.33)
+texture = ExtResource("1_pp61f")
