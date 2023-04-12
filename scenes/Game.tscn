@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://7g0fj2cofygs"]
+[gd_scene load_steps=13 format=3 uid="uid://7g0fj2cofygs"]
 
 [ext_resource type="Texture2D" uid="uid://2yvjwxkd6oy" path="res://assets/images/bg_sky.jpg" id="1_b4875"]
 [ext_resource type="Script" path="res://scenes/ParallaxBackground.gd" id="1_kcy4c"]
@@ -10,6 +10,12 @@
 [ext_resource type="Script" path="res://scripts/HitBox.gd" id="8_lw132"]
 [ext_resource type="Script" path="res://singletons/sound_manager/sound_queue.gd" id="9_hhyx4"]
 [ext_resource type="AudioStream" uid="uid://b6561183kvoy7" path="res://assets/audio/explosion.ogg" id="10_sc2kg"]
+
+[sub_resource type="Curve2D" id="Curve2D_d4jql"]
+_data = {
+"points": PackedVector2Array(-129.373, 80.9574, 129.373, -80.9574, -209, 803, -400.025, 2.3811, 400.025, -2.3811, 244, 484)
+}
+point_count = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j4r0l"]
 size = Vector2(1923, 58)
@@ -45,8 +51,18 @@ offset_right = 1900.0
 offset_bottom = 1080.0
 texture = ExtResource("3_3v2r8")
 
-[node name="Player" parent="ParallaxBackground" instance=ExtResource("6_fiq7g")]
-position = Vector2(-106, 964)
+[node name="Path2D" type="Path2D" parent="ParallaxBackground"]
+position = Vector2(107, 82)
+curve = SubResource("Curve2D_d4jql")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="ParallaxBackground/Path2D"]
+position = Vector2(-209, 803)
+rotation = -0.559151
+loop = false
+
+[node name="Player" parent="ParallaxBackground/Path2D/PathFollow2D" instance=ExtResource("6_fiq7g")]
+position = Vector2(-0.475677, -0.879669)
+scale = Vector2(1, 1)
 
 [node name="Bullets" type="Node2D" parent="ParallaxBackground"]
 
@@ -112,8 +128,8 @@ autostart = true
 [node name="EnemyTimer" type="Timer" parent="."]
 wait_time = 2.0
 
-[connection signal="explode" from="ParallaxBackground/Player" to="." method="_on_player_explode"]
-[connection signal="game_over" from="ParallaxBackground/Player" to="." method="_on_player_game_over"]
-[connection signal="shoot" from="ParallaxBackground/Player" to="." method="_on_player_shoot"]
+[connection signal="explode" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_explode"]
+[connection signal="game_over" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_game_over"]
+[connection signal="shoot" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_shoot"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
 [connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]

@@ -32,15 +32,26 @@ signal game_over()
 var bullet_scene = preload("res://scenes/bullet.tscn")
 var explosion_scene = preload("res://scenes/Explosion.tscn")
 
+var is_game_start: bool
 var bullet_count: int
 var going_down: bool
+var intro_speed: float = 200
 
 func _ready() -> void:
+	is_game_start = true
 	bullet_count = jam_count
 	going_down = false;
 
 
 func _process(delta: float) -> void:
+	if is_game_start:
+		get_parent().set_progress(get_parent().get_progress() + intro_speed * delta)
+		intro_speed -= 0.55
+		if get_parent().get_progress_ratio() == 1:
+			is_game_start = false
+		else:
+			return
+	
 	if going_down: return
 	
 	if Input.is_action_just_pressed("test"):
@@ -65,6 +76,8 @@ func _process(delta: float) -> void:
 		
 
 func _physics_process(delta) -> void:
+	if is_game_start: return
+		
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down") if !going_down else Vector2(0, 1)
 	var direction := Vector2(input_dir.x, input_dir.y).normalized()
 
@@ -118,6 +131,8 @@ func mayday() -> void:
 
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
+	if is_game_start: return
+	
 	explode_plane()
 	queue_free()
 
