@@ -14,7 +14,7 @@ signal game_over()
 
 @export_category("Gun")
 @export var fire_delay: float = 0.2
-@export var cooldown_time: float = 2.0
+@export var cooldown_time: float = 1.5
 @export var jam_count: int = 20
 
 @onready var fire_delay_timer = $FireDelayTimer
@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("test"):
 		explode_plane()
 		queue_free()
-		
+	
 	if Input.is_action_pressed("fire") and fire_delay_timer.is_stopped() and bullet_count > 0:
 		fire()
 	elif Input.is_action_pressed("fire") and fire_delay_timer.is_stopped() and bullet_count == 0:
