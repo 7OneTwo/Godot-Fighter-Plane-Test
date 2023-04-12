@@ -1,13 +1,108 @@
-[gd_scene load_steps=2 format=3 uid="uid://chb4n304yj8du"]
+[gd_scene load_steps=16 format=3 uid="uid://cja01hb8eepr1"]
 
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_5l8bj"]
 [ext_resource type="Texture2D" uid="uid://dxjvgq78gc5mw" path="res://assets/images/player.png" id="1_pp61f"]
+[ext_resource type="Script" path="res://singletons/sound_manager/sound_queue.gd" id="2_5lute"]
+[ext_resource type="AudioStream" uid="uid://dgi03p5ynremn" path="res://assets/audio/gun.ogg" id="3_ec3ip"]
+[ext_resource type="AudioStream" uid="uid://dyg08jda1u0gw" path="res://assets/audio/plane_engine.ogg" id="4_1equc"]
+[ext_resource type="Script" path="res://scripts/HurtBox.gd" id="5_3jqnx"]
+[ext_resource type="Script" path="res://scripts/HitBox.gd" id="6_i1sef"]
+[ext_resource type="AudioStream" uid="uid://j8jpm7acj0lf" path="res://assets/audio/gun_jammed.ogg" id="8_w6m75"]
+[ext_resource type="Texture2D" uid="uid://bgowl0w34myp3" path="res://assets/images/white_smoke.png" id="9_7jpdo"]
 
-[node name="Area2D" type="Area2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wgqij"]
+radius = 17.0
+height = 204.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[sub_resource type="Gradient" id="Gradient_5oo45"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[node name="TextureRect" type="TextureRect" parent="."]
-offset_right = 623.0
-offset_bottom = 220.0
-scale = Vector2(0.33, 0.33)
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ne4vx"]
+gradient = SubResource("Gradient_5oo45")
+
+[sub_resource type="Curve" id="Curve_882km"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8f5cc"]
+curve = SubResource("Curve_882km")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b0ajt"]
+particle_flag_disable_z = true
+direction = Vector3(2.08165e-12, 1, 2.08165e-12)
+spread = 5.0
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_curve = SubResource("CurveTexture_8f5cc")
+color_ramp = SubResource("GradientTexture1D_ne4vx")
+
+[node name="Player" type="Sprite2D" groups=["Player"]]
+position = Vector2(-31, 4)
 texture = ExtResource("1_pp61f")
+script = ExtResource("1_5l8bj")
+
+[node name="HitBox" type="Area2D" parent="."]
+script = ExtResource("6_i1sef")
+damage = 999
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(-4, -6)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_wgqij")
+
+[node name="HurtBox" type="Area2D" parent="."]
+script = ExtResource("5_3jqnx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(-4, -6)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_wgqij")
+
+[node name="Muzzle" type="Node2D" parent="."]
+position = Vector2(41, 4)
+
+[node name="Explosion" type="Node2D" parent="."]
+position = Vector2(13, -4)
+
+[node name="EngineSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_1equc")
+volume_db = -5.0
+autoplay = true
+
+[node name="GunSoundQueue" type="Node" parent="."]
+script = ExtResource("2_5lute")
+count = 10
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="GunSoundQueue"]
+stream = ExtResource("3_ec3ip")
+
+[node name="JamSoundQueue" type="Node" parent="."]
+script = ExtResource("2_5lute")
+count = 4
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="JamSoundQueue"]
+stream = ExtResource("8_w6m75")
+
+[node name="FireDelayTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="GunSmokeParticles" type="GPUParticles2D" parent="."]
+position = Vector2(35, 4)
+rotation = 1.5708
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_b0ajt")
+texture = ExtResource("9_7jpdo")
+
+[connection signal="timeout" from="FireDelayTimer" to="." method="_on_fire_delay_timer_timeout"]
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
