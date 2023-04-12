@@ -13,12 +13,12 @@
 
 [sub_resource type="Curve2D" id="Curve2D_d4jql"]
 _data = {
-"points": PackedVector2Array(-129.373, 80.9574, 129.373, -80.9574, -209, 803, -400.025, 2.3811, 400.025, -2.3811, 244, 484)
+"points": PackedVector2Array(-95.2441, -30.1606, 95.2441, 30.1606, -280, 415, -242.079, 6.3496, 242.079, -6.3496, 120, 493)
 }
 point_count = 2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j4r0l"]
-size = Vector2(1923, 58)
+size = Vector2(1923, 36)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_yubv2")
@@ -56,8 +56,8 @@ position = Vector2(107, 82)
 curve = SubResource("Curve2D_d4jql")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="ParallaxBackground/Path2D"]
-position = Vector2(-209, 803)
-rotation = -0.559151
+position = Vector2(-280, 415)
+rotation = 0.306676
 loop = false
 
 [node name="Player" parent="ParallaxBackground/Path2D/PathFollow2D" instance=ExtResource("6_fiq7g")]
@@ -84,7 +84,7 @@ script = ExtResource("8_lw132")
 damage = 999
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
-position = Vector2(960, 1050)
+position = Vector2(960, 1061)
 shape = SubResource("RectangleShape2D_j4r0l")
 
 [node name="ExplosionSoundQueue" type="Node" parent="."]

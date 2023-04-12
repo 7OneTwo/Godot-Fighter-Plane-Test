@@ -19,14 +19,14 @@ height = 204.0
 [sub_resource type="Gradient" id="Gradient_5oo45"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ne4vx"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yv6nq"]
 gradient = SubResource("Gradient_5oo45")
 
 [sub_resource type="Curve" id="Curve_882km"]
 _data = [Vector2(0.0178155, 0.455764), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_8f5cc"]
+[sub_resource type="CurveTexture" id="CurveTexture_htyfg"]
 curve = SubResource("Curve_882km")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b0ajt"]
@@ -38,8 +38,8 @@ initial_velocity_min = 100.0
 initial_velocity_max = 100.0
 orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
-scale_curve = SubResource("CurveTexture_8f5cc")
-color_ramp = SubResource("GradientTexture1D_ne4vx")
+scale_curve = SubResource("CurveTexture_htyfg")
+color_ramp = SubResource("GradientTexture1D_yv6nq")
 
 [node name="Player" type="Sprite2D" groups=["Player"]]
 position = Vector2(-31, 4)

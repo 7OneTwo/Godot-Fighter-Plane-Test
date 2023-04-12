@@ -46,7 +46,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if is_game_start:
 		get_parent().set_progress(get_parent().get_progress() + intro_speed * delta)
-		intro_speed -= 0.55
+		#intro_speed -= 0.58
 		if get_parent().get_progress_ratio() == 1:
 			is_game_start = false
 		else:

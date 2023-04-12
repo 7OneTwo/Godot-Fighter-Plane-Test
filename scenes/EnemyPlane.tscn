@@ -1,4 +1,4 @@
-[gd_scene load_steps=72 format=3 uid="uid://b34blc45osivx"]
+[gd_scene load_steps=78 format=3 uid="uid://b34blc45osivx"]
 
 [ext_resource type="Texture2D" uid="uid://cfij60s1mmmbj" path="res://assets/images/enemy.png" id="1_akd7b"]
 [ext_resource type="Texture2D" uid="uid://4oog4a1s6hrb" path="res://assets/images/explosion.png" id="2_5qlou"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://cpmifpu5g677u" path="res://assets/audio/ricochet-8.ogg" id="15_ysnax"]
 [ext_resource type="Script" path="res://scripts/HitBox.gd" id="16_c7km0"]
 [ext_resource type="AudioStream" uid="uid://euf40jriwwqr" path="res://assets/audio/engine_bf-109.ogg" id="17_dbu5v"]
+[ext_resource type="Texture2D" uid="uid://drntnp8arjs3i" path="res://assets/images/black_smoke.png" id="18_x2kdw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ochms"]
 atlas = ExtResource("1_akd7b")
@@ -411,6 +412,33 @@ _data = {
 "receed": SubResource("Animation_2ky1b")
 }
 
+[sub_resource type="Gradient" id="Gradient_50mit"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ne4vx"]
+gradient = SubResource("Gradient_50mit")
+
+[sub_resource type="Curve" id="Curve_upc41"]
+_data = [Vector2(0.011977, 0.261128), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8f5cc"]
+curve = SubResource("Curve_upc41")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6aljh"]
+particle_flag_disable_z = true
+direction = Vector3(2.08165e-12, -1, 2.08165e-12)
+spread = 0.0
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+tangential_accel_max = 73.89
+scale_curve = SubResource("CurveTexture_8f5cc")
+color = Color(0, 0, 0, 1)
+color_ramp = SubResource("GradientTexture1D_ne4vx")
+
 [node name="EnemyPlane" type="AnimatedSprite2D" groups=["Enemy Planes"]]
 sprite_frames = SubResource("SpriteFrames_8w346")
 offset = Vector2(103, 36)
@@ -505,13 +533,21 @@ stream = ExtResource("6_ftqvf")
 
 [node name="EngineSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("17_dbu5v")
-volume_db = -40.0
+volume_db = -30.0
 
 [node name="EngineAnimation" type="AnimationPlayer" parent="."]
 method_call_mode = 1
 libraries = {
 "": SubResource("AnimationLibrary_ju5wc")
 }
+
+[node name="EngineSmokeParticles" type="GPUParticles2D" parent="."]
+position = Vector2(26, 34)
+rotation = 1.5708
+emitting = false
+amount = 12
+process_material = SubResource("ParticleProcessMaterial_6aljh")
+texture = ExtResource("18_x2kdw")
 
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
 [connection signal="finished" from="ExplosionSound" to="." method="_on_explosion_sound_finished"]
