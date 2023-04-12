@@ -1,7 +1,7 @@
 extends Sprite2D
 
 signal shoot(bullet)
-signal explode(explosion)
+signal explode_player(explosion)
 signal game_over()
 
 @export var health:int  = 3
@@ -52,7 +52,8 @@ func _process(delta: float) -> void:
 		else:
 			return
 	
-	if going_down: return
+	if going_down:
+		return
 	
 	if Input.is_action_just_pressed("test"):
 		#explode_plane()
@@ -76,7 +77,8 @@ func _process(delta: float) -> void:
 		
 
 func _physics_process(delta) -> void:
-	if is_game_start: return
+	if is_game_start:
+		return
 		
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down") if !going_down else Vector2(0, 1)
 	var direction := Vector2(input_dir.x, input_dir.y).normalized()
@@ -120,7 +122,7 @@ func take_damage(amount: int, body: Area2D) -> void:
 func explode_plane() -> void:
 	var e = explosion_scene.instantiate()
 	e.global_position = explosion.global_position
-	emit_signal("explode", e)
+	emit_signal("explode_player", e)
 
 
 func mayday() -> void:
@@ -131,7 +133,8 @@ func mayday() -> void:
 
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
-	if is_game_start: return
+	if is_game_start:
+		return
 	
 	explode_plane()
 	queue_free()

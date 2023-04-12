@@ -128,7 +128,7 @@ autostart = true
 [node name="EnemyTimer" type="Timer" parent="."]
 wait_time = 2.0
 
-[connection signal="explode" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_explode"]
+[connection signal="explode_player" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_explode"]
 [connection signal="game_over" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_game_over"]
 [connection signal="shoot" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_shoot"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]

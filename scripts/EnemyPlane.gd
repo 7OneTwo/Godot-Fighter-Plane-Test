@@ -1,4 +1,7 @@
-extends AnimatedSprite2D
+extends Sprite2D
+
+signal shoot(bullet)
+signal explode_enemy(explosion)
 
 @export var health: int = 3
 @export var climb_angle_limit: float = -0.1
@@ -13,6 +16,10 @@ extends AnimatedSprite2D
 @onready var hit_box := $HitBox
 @onready var engine_animation: AnimationPlayer = $EngineAnimation
 @onready var engine_smoke = $EngineSmokeParticles
+@onready var explosion = $Explosion
+
+var bullet_scene = preload("res://scenes/bullet.tscn")
+var explosion_scene = preload("res://scenes/Explosion.tscn")
 
 var speed: float
 var movement_vector: Vector2
@@ -66,13 +73,13 @@ func take_damage(amount: int, body: Area2D) -> void:
 		engine_smoke.emitting = false
 	
 	if current_health <=0:
-		engine_smoke.emitting = false
-		hit_box.queue_free()
-		hurt_box.queue_free()
-		play()
-		engine_sound.stop()
-		explosion_sound.play()
+		explode_plane()
+		queue_free()
 
+func explode_plane() -> void:
+	var e = explosion_scene.instantiate()
+	e.global_position = explosion.global_position
+	emit_signal("explode_enemy", e)
 
 func _on_explosion_sound_finished() -> void:
 	queue_free()
