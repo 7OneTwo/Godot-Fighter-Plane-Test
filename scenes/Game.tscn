@@ -46,7 +46,7 @@ offset_bottom = 1080.0
 texture = ExtResource("3_3v2r8")
 
 [node name="Player" parent="ParallaxBackground" instance=ExtResource("6_fiq7g")]
-position = Vector2(219, 416)
+position = Vector2(-106, 964)
 
 [node name="Bullets" type="Node2D" parent="ParallaxBackground"]
 

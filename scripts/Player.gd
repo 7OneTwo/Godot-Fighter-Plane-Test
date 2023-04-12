@@ -20,8 +20,10 @@ signal game_over()
 @onready var fire_delay_timer = $FireDelayTimer
 @onready var cooldown_timer = $CooldownTimer
 @onready var engine_sound = $EngineSound
+@onready var engine_failure_sound = $EngineFailureSound
 @onready var muzzle = $Muzzle
 @onready var gun_smoke = $GunSmokeParticles
+@onready var engine_smoke = $EngineSmokeParticles
 @onready var explosion = $Explosion
 @onready var hurt_box = $HurtBox
 @onready var hit_box = $HitBox
@@ -31,15 +33,20 @@ var bullet_scene = preload("res://scenes/bullet.tscn")
 var explosion_scene = preload("res://scenes/Explosion.tscn")
 
 var bullet_count: int
+var going_down: bool
 
 func _ready() -> void:
 	bullet_count = jam_count
+	going_down = false;
 
 
 func _process(delta: float) -> void:
+	if going_down: return
+	
 	if Input.is_action_just_pressed("test"):
-		explode_plane()
-		queue_free()
+		#explode_plane()
+		#queue_free()
+		mayday()
 	
 	if Input.is_action_pressed("fire") and fire_delay_timer.is_stopped() and bullet_count > 0:
 		fire()
@@ -58,10 +65,12 @@ func _process(delta: float) -> void:
 		
 
 func _physics_process(delta) -> void:
-	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down") if !going_down else Vector2(0, 1)
 	var direction := Vector2(input_dir.x, input_dir.y).normalized()
 
-	var pitch: float = clampf(rotation + direction.y * pitch_speed * delta * climb_speed, climb_angle_limit, dive_angle_limit)
+	var y = direction.y if !going_down else 0.3
+
+	var pitch: float = clampf(rotation + y * pitch_speed * delta * climb_speed, climb_angle_limit, dive_angle_limit)
 	set_rotation(pitch)
 	position.y += (rotation * climb_speed)
 	
@@ -101,8 +110,11 @@ func explode_plane() -> void:
 	emit_signal("explode", e)
 
 
-func _on_fire_delay_timer_timeout() -> void:
-	pass#fire_delay_timer.stop()
+func mayday() -> void:
+	going_down = true
+	engine_smoke.emitting = true
+	engine_sound.stop()
+	engine_failure_sound.play()
 
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:

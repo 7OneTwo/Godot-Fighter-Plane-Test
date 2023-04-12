@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cja01hb8eepr1"]
+[gd_scene load_steps=18 format=3 uid="uid://cja01hb8eepr1"]
 
 [ext_resource type="Script" path="res://scripts/Player.gd" id="1_5l8bj"]
 [ext_resource type="Texture2D" uid="uid://dxjvgq78gc5mw" path="res://assets/images/player.png" id="1_pp61f"]
@@ -6,9 +6,11 @@
 [ext_resource type="AudioStream" uid="uid://dgi03p5ynremn" path="res://assets/audio/gun.ogg" id="3_ec3ip"]
 [ext_resource type="AudioStream" uid="uid://dyg08jda1u0gw" path="res://assets/audio/plane_engine.ogg" id="4_1equc"]
 [ext_resource type="Script" path="res://scripts/HurtBox.gd" id="5_3jqnx"]
+[ext_resource type="AudioStream" uid="uid://dbsb67dxkwgv" path="res://assets/audio/plane_failure.ogg" id="6_df3ut"]
 [ext_resource type="Script" path="res://scripts/HitBox.gd" id="6_i1sef"]
 [ext_resource type="AudioStream" uid="uid://j8jpm7acj0lf" path="res://assets/audio/gun_jammed.ogg" id="8_w6m75"]
 [ext_resource type="Texture2D" uid="uid://bgowl0w34myp3" path="res://assets/images/white_smoke.png" id="9_7jpdo"]
+[ext_resource type="Texture2D" uid="uid://drntnp8arjs3i" path="res://assets/images/black_smoke.png" id="10_4jnp4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wgqij"]
 radius = 17.0
@@ -21,7 +23,7 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 gradient = SubResource("Gradient_5oo45")
 
 [sub_resource type="Curve" id="Curve_882km"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+_data = [Vector2(0.0178155, 0.455764), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
 [sub_resource type="CurveTexture" id="CurveTexture_8f5cc"]
@@ -72,6 +74,9 @@ stream = ExtResource("4_1equc")
 volume_db = -5.0
 autoplay = true
 
+[node name="EngineFailureSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_df3ut")
+
 [node name="GunSoundQueue" type="Node" parent="."]
 script = ExtResource("2_5lute")
 count = 10
@@ -102,6 +107,13 @@ rotation = 1.5708
 emitting = false
 process_material = SubResource("ParticleProcessMaterial_b0ajt")
 texture = ExtResource("9_7jpdo")
+
+[node name="EngineSmokeParticles" type="GPUParticles2D" parent="."]
+position = Vector2(75, -6)
+rotation = 1.5708
+emitting = false
+process_material = SubResource("ParticleProcessMaterial_b0ajt")
+texture = ExtResource("10_4jnp4")
 
 [connection signal="timeout" from="FireDelayTimer" to="." method="_on_fire_delay_timer_timeout"]
 [connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
