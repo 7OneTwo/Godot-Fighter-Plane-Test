@@ -1,7 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://8u8khwmisaxh"]
+[gd_scene load_steps=7 format=3 uid="uid://d0rh32xbjvyoe"]
 
 [ext_resource type="Texture2D" uid="uid://caunvq62aodm1" path="res://assets/images/bullet.png" id="1_2utbi"]
-[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_lob8k"]
+[ext_resource type="Script" path="res://scripts/Bullet.gd" id="1_lob8k"]
 [ext_resource type="Script" path="res://scripts/HitBox.gd" id="2_6i3il"]
 [ext_resource type="Script" path="res://singletons/sound_manager/sound_queue.gd" id="4_0xkb7"]
 [ext_resource type="AudioStream" uid="uid://dgi03p5ynremn" path="res://assets/audio/gun.ogg" id="5_my8ap"]
@@ -11,6 +11,7 @@ radius = 4.0
 height = 32.0
 
 [node name="Bullet" type="Node2D" groups=["Player Bullets"]]
+scale = Vector2(0.65, 0.65)
 script = ExtResource("1_lob8k")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

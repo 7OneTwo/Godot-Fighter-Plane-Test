@@ -3,13 +3,14 @@ extends Node2D
 
 @onready var bullets = $ParallaxBackground/Bullets
 @onready var explosions = $ParallaxBackground/Explosions
-@onready var explosion_sound = $ExplosionSoundQueue
 @onready var enemy_planes = $ParallaxBackground/EnemyPlanes
-@onready var game_over = $GameOver
+@onready var game_start = $ParallaxBackground/GameStart
+@onready var game_over = $ParallaxBackground/GameOver
+@onready var game_over_anim = $ParallaxBackground/GameOverAnimation
 @onready var start_timer = $StartTimer
 @onready var enemy_timer = $EnemyTimer
+@onready var player = $ParallaxBackground/Path2D/PathFollow2D/Player
 
-var player_scene = preload("res://scenes/player.tscn")
 var enemy_plane = preload("res://scenes/EnemyPlane.tscn")
 
 var spawn_y_min = 40
@@ -21,9 +22,15 @@ var rand = RandomNumberGenerator.new()
 
 func _ready() -> void:
 	rand.randomize()
+	player.get_tree().paused = true
 
 
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("fire") and game_start.visible:
+		game_start.visible = false
+		player.get_tree().paused = false
+		start_timer.start()
+
 	if Input.is_action_just_pressed("fire") and game_over.visible:
 		get_tree().reload_current_scene()
 
@@ -34,18 +41,18 @@ func _on_player_shoot(bullet) -> void:
 
 func _on_player_explode(explosion) -> void:
 	explosions.add_child(explosion)
-	$ExplosionSoundQueue/AudioStreamPlayer.pitch_scale = 0.35
-	explosion_sound.play_sound()
+	explosion.explode(0.35)
 	game_over.visible = true
+	game_over_anim.play("game_over")
 
 
 func _on_enemy_explode(explosion) -> void:
 	explosions.add_child(explosion)
 	explosion.set_rotation_degrees(rand.randi_range(0, 359))
+	
 	var s = rand.randf_range(1.0, 1.5)
 	explosion.scale = Vector2(s, s)
-	$ExplosionSoundQueue/AudioStreamPlayer.pitch_scale = randf_range(0.65, 1.0)
-	explosion_sound.play_sound()
+	explosion.explode(1.5 - s + 0.5)
 
 
 func _on_start_timer_timeout() -> void:

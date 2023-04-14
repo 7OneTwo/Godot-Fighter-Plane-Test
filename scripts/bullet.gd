@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var speed: float = 700.0
+@export var speed: float = 1000.0
 
 @onready var shoot_sound := $SoundQueue
 

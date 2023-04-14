@@ -32,33 +32,38 @@ signal game_over()
 var bullet_scene = preload("res://scenes/bullet.tscn")
 var explosion_scene = preload("res://scenes/Explosion.tscn")
 
-var is_game_start: bool
+var is_intro_complete: bool
 var bullet_count: int
-var going_down: bool
+var is_going_down: bool
 var intro_speed: float = 200
 
 func _ready() -> void:
-	is_game_start = true
+	is_intro_complete = false
 	bullet_count = jam_count
-	going_down = false;
+	is_going_down = false;
 
 
 func _process(delta: float) -> void:
-	if is_game_start:
-		get_parent().set_progress(get_parent().get_progress() + intro_speed * delta)
-		#intro_speed -= 0.58
-		if get_parent().get_progress_ratio() == 1:
-			is_game_start = false
-		else:
-			return
+	if !is_intro_complete:
+		var tween: Tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		var follow = get_parent()
+		
+		tween.tween_property(follow, 'progress_ratio', 1, 1)
+		tween.tween_callback(func(): is_intro_complete = true)
+		
+		engine_sound.pitch_scale = 1.2 - (follow.progress_ratio / 5)
+		engine_sound.volume_db = -10 + (follow.progress_ratio * 10)
 	
-	if going_down:
+	if is_going_down:
 		return
 	
-	if Input.is_action_just_pressed("test"):
-		#explode_plane()
-		#queue_free()
+	if Input.is_action_just_pressed("test_mayday"):
 		mayday()
+	
+	if Input.is_action_just_pressed("test_explode"):
+		explode_plane()
+		queue_free()
+
 	
 	if Input.is_action_pressed("fire") and fire_delay_timer.is_stopped() and bullet_count > 0:
 		fire()
@@ -77,13 +82,13 @@ func _process(delta: float) -> void:
 		
 
 func _physics_process(delta) -> void:
-	if is_game_start:
+	if !is_intro_complete:
 		return
 		
-	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down") if !going_down else Vector2(0, 1)
+	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down") if !is_going_down else Vector2(0, 1)
 	var direction := Vector2(input_dir.x, input_dir.y).normalized()
 
-	var y = direction.y if !going_down else 0.3
+	var y = direction.y if !is_going_down else 0.3
 
 	var pitch: float = clampf(rotation + y * pitch_speed * delta * climb_speed, climb_angle_limit, dive_angle_limit)
 	set_rotation(pitch)
@@ -93,6 +98,9 @@ func _physics_process(delta) -> void:
 
 
 func fire() -> void:
+	if !is_intro_complete:
+		return
+	
 	var b = bullet_scene.instantiate()
 	b.global_position = muzzle.global_position
 	b.rotation = rotation
@@ -126,14 +134,14 @@ func explode_plane() -> void:
 
 
 func mayday() -> void:
-	going_down = true
+	is_going_down = true
 	engine_smoke.emitting = true
 	engine_sound.stop()
 	engine_failure_sound.play()
 
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
-	if is_game_start:
+	if !is_intro_complete:
 		return
 	
 	explode_plane()

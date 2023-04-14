@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://7g0fj2cofygs"]
+[gd_scene load_steps=14 format=3 uid="uid://7g0fj2cofygs"]
 
 [ext_resource type="Texture2D" uid="uid://2yvjwxkd6oy" path="res://assets/images/bg_sky.jpg" id="1_b4875"]
 [ext_resource type="Script" path="res://scenes/ParallaxBackground.gd" id="1_kcy4c"]
@@ -8,8 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bljrs3phhgla6" path="res://assets/images/bg_near.png" id="4_u50mc"]
 [ext_resource type="PackedScene" uid="uid://cja01hb8eepr1" path="res://scenes/Player.tscn" id="6_fiq7g"]
 [ext_resource type="Script" path="res://scripts/HitBox.gd" id="8_lw132"]
-[ext_resource type="Script" path="res://singletons/sound_manager/sound_queue.gd" id="9_hhyx4"]
-[ext_resource type="AudioStream" uid="uid://b6561183kvoy7" path="res://assets/audio/explosion.ogg" id="10_sc2kg"]
+[ext_resource type="FontFile" uid="uid://do4vglhbcm10s" path="res://assets/fonts/SairaStencilOne-Regular.ttf" id="9_2omi6"]
 
 [sub_resource type="Curve2D" id="Curve2D_d4jql"]
 _data = {
@@ -17,10 +16,44 @@ _data = {
 }
 point_count = 2
 
+[sub_resource type="Animation" id="Animation_3qdxy"]
+resource_name = "game_over"
+length = 8.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("GameOver:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5.9, 8),
+"transitions": PackedFloat32Array(0.5, 0.5, 2),
+"update": 0,
+"values": [Vector2(2.08165e-12, 510), Vector2(2.08165e-12, 2.08165e-12), Vector2(2.08165e-12, 2.08165e-12)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GameOver:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 5.9, 8),
+"transitions": PackedFloat32Array(0.5, 0.5, 2),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r4kns"]
+_data = {
+"game_over": SubResource("Animation_3qdxy")
+}
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j4r0l"]
 size = Vector2(1923, 36)
 
 [node name="Game" type="Node2D"]
+process_mode = 3
 script = ExtResource("1_yubv2")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
@@ -61,14 +94,90 @@ rotation = 0.306676
 loop = false
 
 [node name="Player" parent="ParallaxBackground/Path2D/PathFollow2D" instance=ExtResource("6_fiq7g")]
+process_mode = 1
 position = Vector2(-0.475677, -0.879669)
-scale = Vector2(1, 1)
 
 [node name="Bullets" type="Node2D" parent="ParallaxBackground"]
 
 [node name="Explosions" type="Node2D" parent="ParallaxBackground"]
 
 [node name="EnemyPlanes" type="Node2D" parent="ParallaxBackground"]
+
+[node name="GameStart" type="Control" parent="ParallaxBackground"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ParallaxBackground/GameStart"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -392.0
+offset_top = -89.0
+offset_right = 392.0
+offset_bottom = 89.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="ParallaxBackground/GameStart/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.470588, 0, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/font = ExtResource("9_2omi6")
+theme_override_font_sizes/font_size = 168
+text = "DOG FIGHT"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="ParallaxBackground/GameStart/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 40
+text = "Fire when ready..."
+horizontal_alignment = 1
+
+[node name="GameOver" type="Control" parent="ParallaxBackground"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="ParallaxBackground/GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -56.5
+offset_right = 230.0
+offset_bottom = 56.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/font = ExtResource("9_2omi6")
+theme_override_font_sizes/font_size = 230
+text = "GAME OVER"
+
+[node name="GameOverAnimation" type="AnimationPlayer" parent="ParallaxBackground"]
+libraries = {
+"": SubResource("AnimationLibrary_r4kns")
+}
 
 [node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_mirroring = Vector2(1900, 2.08165e-12)
@@ -87,43 +196,9 @@ damage = 999
 position = Vector2(960, 1061)
 shape = SubResource("RectangleShape2D_j4r0l")
 
-[node name="ExplosionSoundQueue" type="Node" parent="."]
-script = ExtResource("9_hhyx4")
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="ExplosionSoundQueue"]
-stream = ExtResource("10_sc2kg")
-
-[node name="GameOver" type="Control" parent="."]
-visible = false
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1920.0
-offset_bottom = 1080.0
-
-[node name="Label" type="Label" parent="GameOver"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 4
-theme_override_constants/shadow_outline_size = 0
-theme_override_font_sizes/font_size = 128
-text = "GAME OVER"
-
 [node name="StartTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
-autostart = true
 
 [node name="EnemyTimer" type="Timer" parent="."]
 wait_time = 2.0

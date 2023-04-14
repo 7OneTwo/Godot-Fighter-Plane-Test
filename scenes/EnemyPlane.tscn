@@ -83,6 +83,8 @@ initial_velocity_max = 100.0
 orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
 tangential_accel_max = 73.89
+angle_min = 3.9968e-14
+angle_max = 359.0
 scale_curve = SubResource("CurveTexture_8f5cc")
 color = Color(0, 0, 0, 1)
 color_ramp = SubResource("GradientTexture1D_ne4vx")
@@ -182,6 +184,7 @@ volume_db = -10.0
 
 [node name="ExplosionSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ftqvf")
+volume_db = -15.0
 
 [node name="EngineSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("17_dbu5v")

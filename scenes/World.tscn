@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://c7jk8c18jv6b0"]
+
+[ext_resource type="PackedScene" uid="uid://7g0fj2cofygs" path="res://scenes/Game.tscn" id="1_iyvjo"]
+
+[sub_resource type="Environment" id="Environment_r8swj"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_hk2bj"]
+
+[node name="World" type="WorldEnvironment"]
+environment = SubResource("Environment_r8swj")
+camera_attributes = SubResource("CameraAttributesPractical_hk2bj")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(960, 540)
+offset = Vector2(2.08165e-12, 2.08165e-12)
+
+[node name="Game" parent="." instance=ExtResource("1_iyvjo")]

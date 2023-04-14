@@ -38,6 +38,7 @@ initial_velocity_min = 100.0
 initial_velocity_max = 100.0
 orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
+angle_max = 359.0
 scale_curve = SubResource("CurveTexture_htyfg")
 color_ramp = SubResource("GradientTexture1D_yv6nq")
 
@@ -70,6 +71,7 @@ position = Vector2(41, 4)
 position = Vector2(13, -4)
 
 [node name="EngineSound" type="AudioStreamPlayer" parent="."]
+process_mode = 3
 stream = ExtResource("4_1equc")
 volume_db = -5.0
 autoplay = true
@@ -90,6 +92,8 @@ count = 4
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="JamSoundQueue"]
 stream = ExtResource("8_w6m75")
+volume_db = 5.0
+pitch_scale = 0.8
 
 [node name="FireDelayTimer" type="Timer" parent="."]
 wait_time = 0.2
