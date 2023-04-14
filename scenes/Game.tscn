@@ -147,10 +147,12 @@ horizontal_alignment = 1
 
 [node name="GameOver" type="Control" parent="ParallaxBackground"]
 visible = false
+modulate = Color(1, 1, 1, 0.667911)
 layout_mode = 3
 anchors_preset = 0
+offset_top = 169.365
 offset_right = 1920.0
-offset_bottom = 1080.0
+offset_bottom = 1249.37
 size_flags_vertical = 0
 
 [node name="Label" type="Label" parent="ParallaxBackground/GameOver"]
@@ -196,15 +198,19 @@ damage = 999
 position = Vector2(960, 1061)
 shape = SubResource("RectangleShape2D_j4r0l")
 
-[node name="StartTimer" type="Timer" parent="."]
+[node name="WaveTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
 
-[node name="EnemyTimer" type="Timer" parent="."]
+[node name="PlaneSpawnTimer" type="Timer" parent="."]
 wait_time = 2.0
+
+[node name="V2SpawnTimer" type="Timer" parent="."]
+wait_time = 45.0
 
 [connection signal="explode_player" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_explode"]
 [connection signal="game_over" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_game_over"]
 [connection signal="shoot" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_shoot"]
-[connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
-[connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]
+[connection signal="timeout" from="WaveTimer" to="." method="_on_wave_timer_timeout"]
+[connection signal="timeout" from="PlaneSpawnTimer" to="." method="_on_plane_spawn_timer_timeout"]
+[connection signal="timeout" from="V2SpawnTimer" to="." method="_on_v_2_spawn_timer_timeout"]

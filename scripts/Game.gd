@@ -1,5 +1,11 @@
 extends Node2D
 
+@export_category("Enemy Waves")
+@export var starting_wave: int = 1
+@export var plane_spawn_interval: float = 3.0
+@export var plane_spawn_interval_dec:  = 0.0
+@export var plane_spawn_count_inc: int = 2
+@export var plane_starting_count: int = 15
 
 @onready var bullets = $ParallaxBackground/Bullets
 @onready var explosions = $ParallaxBackground/Explosions
@@ -7,11 +13,13 @@ extends Node2D
 @onready var game_start = $ParallaxBackground/GameStart
 @onready var game_over = $ParallaxBackground/GameOver
 @onready var game_over_anim = $ParallaxBackground/GameOverAnimation
-@onready var start_timer = $StartTimer
-@onready var enemy_timer = $EnemyTimer
+@onready var wave_timer = $WaveTimer
+@onready var v2_spawn_timer = $V2SpawnTimer
+@onready var plane_spawn_timer = $PlaneSpawnTimer
 @onready var player = $ParallaxBackground/Path2D/PathFollow2D/Player
 
 var enemy_plane = preload("res://scenes/EnemyPlane.tscn")
+var v2_rocket = preload("res://scenes/V2Rocket.tscn")
 
 var spawn_y_min = 40
 var spawn_y_max = 900
@@ -29,7 +37,8 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("fire") and game_start.visible:
 		game_start.visible = false
 		player.get_tree().paused = false
-		start_timer.start()
+		wave_timer.start()
+		v2_spawn_timer.start()
 
 	if Input.is_action_just_pressed("fire") and game_over.visible:
 		get_tree().reload_current_scene()
@@ -55,20 +64,30 @@ func _on_enemy_explode(explosion) -> void:
 	explosion.explode(1.5 - s + 0.5)
 
 
-func _on_start_timer_timeout() -> void:
-	_on_enemy_timer_timeout()
-	enemy_timer.start()
-	enemy_timer.wait_time = rand.randi_range(spawn_interval_min, spawn_interval_max)
+func _on_wave_timer_timeout() -> void:
+	_on_plane_spawn_timer_timeout()
+	plane_spawn_timer.start()
+	#plane_spawn_timer.wait_time = rand.randi_range(spawn_interval_min, spawn_interval_max)
+	plane_spawn_timer.wait_time = plane_spawn_interval
 
 
-func _on_enemy_timer_timeout() -> void:
+func _on_plane_spawn_timer_timeout() -> void:
 	var enemy = enemy_plane.instantiate()
 	enemy.connect("explode_enemy", _on_enemy_explode)
 	enemy.position = Vector2(get_viewport_rect().size.x - 1, randi_range(spawn_y_min, spawn_y_max))
 	enemy_planes.add_child(enemy)
 
-	enemy_timer.wait_time = rand.randi_range(spawn_interval_min, spawn_interval_max)
+	plane_spawn_timer.wait_time = rand.randi_range(spawn_interval_min, spawn_interval_max)
 
 
 func _on_player_game_over() -> void:
-	enemy_timer.stop()
+	plane_spawn_timer.stop()
+	v2_spawn_timer.stop()
+
+
+func _on_v_2_spawn_timer_timeout() -> void:
+	print("timer")
+	var v2 = v2_rocket.instantiate()
+	#v2.connect("explode_enemy", _on_enemy_explode)
+	v2.position = Vector2(get_viewport_rect().size.x - 1, player.global_position.y - 46)
+	enemy_planes.add_child(v2)

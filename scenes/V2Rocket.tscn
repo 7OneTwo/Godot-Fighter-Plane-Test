@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://cj1hinpq74mfj"]
+
+[ext_resource type="Texture2D" uid="uid://b5xuf53cnx70f" path="res://assets/images/v2_rocket.png" id="1_e864g"]
+[ext_resource type="Script" path="res://scenes/V2Rocket.gd" id="1_koptr"]
+[ext_resource type="Texture2D" uid="uid://cu5nivpm78sn6" path="res://assets/images/v2_thrust.png" id="2_2x2tg"]
+[ext_resource type="AudioStream" uid="uid://3yxy56plnhre" path="res://assets/audio/v2_rocket.ogg" id="4_570yh"]
+[ext_resource type="Script" path="res://scripts/HitBox.gd" id="5_2fsci"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3u7yh"]
+radius = 23.0
+height = 396.0
+
+[node name="V2Rocket" type="Sprite2D"]
+texture = ExtResource("1_e864g")
+offset = Vector2(200, 46)
+script = ExtResource("1_koptr")
+
+[node name="V2Thrust" type="Sprite2D" parent="."]
+position = Vector2(451, 44)
+texture = ExtResource("2_2x2tg")
+
+[node name="ThrustSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_570yh")
+volume_db = 10.0
+autoplay = true
+
+[node name="HitBox" type="Area2D" parent="."]
+script = ExtResource("5_2fsci")
+damage = 99
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(197, 48)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_3u7yh")
+
+[connection signal="finished" from="ThrustSound" to="." method="_on_thrust_sound_finished"]
