@@ -51,9 +51,12 @@ func _process(delta: float) -> void:
 		tween.tween_property(follow, 'progress_ratio', 1, 1)
 		tween.tween_callback(func(): is_intro_complete = true)
 		
+		if engine_sound.playing == false:
+			engine_sound.play()
+		
 		engine_sound.pitch_scale = 1.2 - (follow.progress_ratio / 5)
 		engine_sound.volume_db = -10 + (follow.progress_ratio * 10)
-	
+		
 	if is_going_down:
 		return
 	

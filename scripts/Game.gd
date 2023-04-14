@@ -17,6 +17,7 @@ extends Node2D
 @onready var v2_spawn_timer = $V2SpawnTimer
 @onready var plane_spawn_timer = $PlaneSpawnTimer
 @onready var player = $ParallaxBackground/Path2D/PathFollow2D/Player
+@onready var hud = $HUD
 
 var enemy_plane = preload("res://scenes/EnemyPlane.tscn")
 var v2_rocket = preload("res://scenes/V2Rocket.tscn")
@@ -27,20 +28,27 @@ var spawn_interval_min = 2
 var spawn_interval_max = 6
 var rand = RandomNumberGenerator.new()
 
+var score_label
+var accuracy_label
+
 
 func _ready() -> void:
 	rand.randomize()
+	score_label = hud.get_node("%ScoreLabel")
+	accuracy_label = hud.get_node("%AccuracyLabel")
 	player.get_tree().paused = true
 
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("fire") and game_start.visible:
+		hud.visible = true
 		game_start.visible = false
 		player.get_tree().paused = false
 		wave_timer.start()
 		v2_spawn_timer.start()
 
 	if Input.is_action_just_pressed("fire") and game_over.visible:
+		hud.visible = false
 		get_tree().reload_current_scene()
 
 
@@ -56,6 +64,8 @@ func _on_player_explode(explosion) -> void:
 
 
 func _on_enemy_explode(explosion) -> void:
+	var score = int(score_label.text) + 1
+	score_label.text = "%s" % score
 	explosions.add_child(explosion)
 	explosion.set_rotation_degrees(rand.randi_range(0, 359))
 	
@@ -83,6 +93,7 @@ func _on_plane_spawn_timer_timeout() -> void:
 func _on_player_game_over() -> void:
 	plane_spawn_timer.stop()
 	v2_spawn_timer.stop()
+	
 
 
 func _on_v_2_spawn_timer_timeout() -> void:

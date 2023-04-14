@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://7g0fj2cofygs"]
+[gd_scene load_steps=15 format=3 uid="uid://7g0fj2cofygs"]
 
 [ext_resource type="Texture2D" uid="uid://2yvjwxkd6oy" path="res://assets/images/bg_sky.jpg" id="1_b4875"]
 [ext_resource type="Script" path="res://scenes/ParallaxBackground.gd" id="1_kcy4c"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cja01hb8eepr1" path="res://scenes/Player.tscn" id="6_fiq7g"]
 [ext_resource type="Script" path="res://scripts/HitBox.gd" id="8_lw132"]
 [ext_resource type="FontFile" uid="uid://do4vglhbcm10s" path="res://assets/fonts/SairaStencilOne-Regular.ttf" id="9_2omi6"]
+[ext_resource type="PackedScene" uid="uid://dslll3ndhkbab" path="res://scenes/Hud.tscn" id="10_mvq0e"]
 
 [sub_resource type="Curve2D" id="Curve2D_d4jql"]
 _data = {
@@ -206,7 +207,10 @@ one_shot = true
 wait_time = 2.0
 
 [node name="V2SpawnTimer" type="Timer" parent="."]
-wait_time = 45.0
+wait_time = 5.0
+
+[node name="HUD" parent="." instance=ExtResource("10_mvq0e")]
+visible = false
 
 [connection signal="explode_player" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_explode"]
 [connection signal="game_over" from="ParallaxBackground/Path2D/PathFollow2D/Player" to="." method="_on_player_game_over"]

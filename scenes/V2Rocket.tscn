@@ -10,7 +10,7 @@
 radius = 23.0
 height = 396.0
 
-[node name="V2Rocket" type="Sprite2D"]
+[node name="V2Rocket" type="Sprite2D" groups=["Enemy Planes"]]
 texture = ExtResource("1_e864g")
 offset = Vector2(200, 46)
 script = ExtResource("1_koptr")
