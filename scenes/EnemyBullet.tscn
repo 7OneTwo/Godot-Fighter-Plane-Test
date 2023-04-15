@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmmd0of0s7wek"]
+
+[ext_resource type="Script" path="res://scripts/EnemyBullet.gd" id="1_bwcgu"]
+[ext_resource type="Texture2D" uid="uid://caunvq62aodm1" path="res://assets/images/bullet.png" id="2_acp8k"]
+[ext_resource type="Script" path="res://scripts/HitBox.gd" id="3_3i4bh"]
+[ext_resource type="Script" path="res://singletons/sound_manager/sound_queue.gd" id="4_ebya4"]
+[ext_resource type="AudioStream" uid="uid://dgi03p5ynremn" path="res://assets/audio/gun.ogg" id="5_n288h"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8j6sv"]
+radius = 4.0
+height = 32.0
+
+[node name="EnemyBullet" type="Node2D" groups=["Enemy Bullets"]]
+scale = Vector2(0.65, 0.65)
+script = ExtResource("1_bwcgu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(17, 0)
+texture = ExtResource("2_acp8k")
+
+[node name="HitBox" type="Area2D" parent="."]
+script = ExtResource("3_3i4bh")
+damage = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(16, 0)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_8j6sv")
+
+[node name="SoundQueue" type="Node" parent="."]
+script = ExtResource("4_ebya4")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="SoundQueue"]
+stream = ExtResource("5_n288h")
+volume_db = -5.0
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(16, 2.38419e-07)
+scale = Vector2(1.6, 0.4)
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

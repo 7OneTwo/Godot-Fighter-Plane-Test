@@ -8,6 +8,10 @@ signal explode_enemy(explosion)
 @export var dive_angle_limit: float = 0.1
 @export var speed_min: float = 12
 @export var speed_max: float = 16
+@export_category("Gun")
+@export var bullet_limit: int = 3
+@export var fire_delay: float = 0.2
+
 
 @onready var engine_sound: AudioStreamPlayer = $EngineSound
 @onready var explosion_sound: AudioStreamPlayer = $ExplosionSound
@@ -17,13 +21,17 @@ signal explode_enemy(explosion)
 @onready var engine_animation: AnimationPlayer = $EngineAnimation
 @onready var engine_smoke = $EngineSmokeParticles
 @onready var explosion = $Explosion
+@onready var fire_start_timer = $FireStartTimer
+@onready var fire_delay_timer = $FireDelayTimer
+@onready var muzzle = $Muzzle
 
-var bullet_scene = preload("res://scenes/bullet.tscn")
+var bullet_scene = preload("res://scenes/EnemyBullet.tscn")
 var explosion_scene = preload("res://scenes/Explosion.tscn")
 
 var speed: float
 var movement_vector: Vector2
 var current_health: float
+var bullet_count: int
 
 var rand: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -34,6 +42,7 @@ func _ready() -> void:
 	movement_vector = Vector2(-speed, 0)
 	
 	current_health = health
+	bullet_count = bullet_limit
 	
 	var pitch: float = rand.randf_range(climb_angle_limit, dive_angle_limit)
 	set_rotation(pitch)
@@ -41,13 +50,27 @@ func _ready() -> void:
 	engine_animation.play("approach")
 	engine_sound.play()
 	
+	if rand.randi_range(1, 3) == 1:
+		fire_delay_timer.start(rand.randi_range(1, 4))
+	
 
 func _process(delta: float) -> void:
-	pass
+	if fire_delay_timer.is_stopped() and bullet_count < bullet_limit:
+		fire_delay_timer.start(fire_delay)
+		bullet_count -= 1
 
 
 func _physics_process(delta: float) -> void:
 	position += movement_vector.rotated(rotation) * speed * delta
+
+
+func fire() -> void:
+	var b = bullet_scene.instantiate()
+	b.global_position = muzzle.global_position
+	b.rotation = rotation
+	emit_signal("shoot", b)
+	fire_delay_timer.start(fire_delay)
+	bullet_count -= 1
 
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
@@ -55,7 +78,7 @@ func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
 
 
 func take_damage(amount: int, body: Area2D) -> void:
-	if body.get_parent().is_in_group("Enemy Planes"):
+	if body.get_parent().is_in_group("Enemy Planes") or body.get_parent().is_in_group("Enemy Bullets"):
 		return
 		
 	if body.get_parent().is_in_group("Player Bullets"):
@@ -88,3 +111,15 @@ func _on_explosion_sound_finished() -> void:
 func _on_engine_animation_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "receed":
 		queue_free()
+
+
+func _on_fire_delay_timer_timeout() -> void:
+	if bullet_count <= 0:
+		return
+		
+	fire_delay_timer.stop()
+	fire()
+
+
+func _on_fire_start_timer_timeout() -> void:
+	pass # Replace with function body.

@@ -4,7 +4,7 @@ signal shoot(bullet)
 signal explode_player(explosion)
 signal game_over()
 
-@export var health:int  = 3
+@export var health:int = 5
 
 @export_category("Aircraft")
 @export var pitch_speed: float = 0.15
@@ -28,16 +28,19 @@ signal game_over()
 @onready var hurt_box = $HurtBox
 @onready var hit_box = $HitBox
 @onready var jam_sound = $JamSoundQueue
+@onready var richochet_sound := $RicoshetSoundPool
 
 var bullet_scene = preload("res://scenes/bullet.tscn")
 var explosion_scene = preload("res://scenes/Explosion.tscn")
 
+var current_health: int
 var is_intro_complete: bool
 var bullet_count: int
 var is_going_down: bool
 var intro_speed: float = 200
 
 func _ready() -> void:
+	current_health = health
 	is_intro_complete = false
 	bullet_count = jam_count
 	is_going_down = false;
@@ -119,16 +122,27 @@ func jam_fire() -> void:
 	cooldown_timer.start(cooldown_time)
 
 func take_damage(amount: int, body: Area2D) -> void:
-	if body.get_parent().is_in_group("Player"):
+	if body.get_parent().is_in_group("Player") or body.get_parent().is_in_group("Player Bullets"):
 		return
 	
-	if !body.get_parent().is_in_group("Player Bullets"):
-		health -= amount
-		
-	if health <= 0:
+	current_health -= amount
+	richochet_sound.play_random_sound()
+
+	if current_health < health:
+		engine_smoke.emitting = true
+		var s = (health + 5 - current_health) / health
+		engine_smoke.process_material.scale_min = s
+		engine_smoke.process_material.scale_max = s
+	else:
+		engine_smoke.emitting = false
+	
+	if current_health <= 0 and body.get_parent().is_in_group("Enemy Planes"):
 		emit_signal("game_over")
 		explode_plane()
 		queue_free()
+	elif current_health <= 0:
+		emit_signal("game_over")
+		mayday()
 
 func explode_plane() -> void:
 	var e = explosion_scene.instantiate()
