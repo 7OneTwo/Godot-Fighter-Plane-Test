@@ -128,6 +128,7 @@ script = ExtResource("7_dv1p0")
 
 [node name="SoundQueue" type="Node" parent="RicoshetSoundPool"]
 script = ExtResource("5_2tpj1")
+count = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue"]
 stream = ExtResource("8_pxlo6")
@@ -135,6 +136,7 @@ volume_db = -10.0
 
 [node name="SoundQueue2" type="Node" parent="RicoshetSoundPool"]
 script = ExtResource("5_2tpj1")
+count = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue2"]
 stream = ExtResource("9_ptnl7")
@@ -142,6 +144,7 @@ volume_db = -10.0
 
 [node name="SoundQueue3" type="Node" parent="RicoshetSoundPool"]
 script = ExtResource("5_2tpj1")
+count = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue3"]
 stream = ExtResource("10_hixji")
@@ -149,38 +152,42 @@ volume_db = -10.0
 
 [node name="SoundQueue4" type="Node" parent="RicoshetSoundPool"]
 script = ExtResource("5_2tpj1")
+count = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue4"]
 stream = ExtResource("11_tstxh")
-volume_db = -10.0
 
 [node name="SoundQueue5" type="Node" parent="RicoshetSoundPool"]
 script = ExtResource("5_2tpj1")
+count = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue5"]
 stream = ExtResource("12_m3pr8")
-volume_db = -10.0
+volume_db = -5.0
 
 [node name="SoundQueue6" type="Node" parent="RicoshetSoundPool"]
 script = ExtResource("5_2tpj1")
+count = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue6"]
 stream = ExtResource("13_am8w6")
-volume_db = -10.0
+volume_db = -7.0
 
 [node name="SoundQueue7" type="Node" parent="RicoshetSoundPool"]
 script = ExtResource("5_2tpj1")
+count = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue7"]
 stream = ExtResource("14_5fayi")
-volume_db = -10.0
+volume_db = -3.0
 
 [node name="SoundQueue8" type="Node" parent="RicoshetSoundPool"]
 script = ExtResource("5_2tpj1")
+count = 3
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue8"]
 stream = ExtResource("15_ysnax")
-volume_db = -10.0
+volume_db = -3.0
 
 [node name="ExplosionSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ftqvf")
