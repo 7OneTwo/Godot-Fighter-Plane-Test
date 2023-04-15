@@ -74,6 +74,16 @@ func _on_enemy_explode(explosion) -> void:
 	explosion.explode(1.5 - s + 0.5)
 
 
+func _on_v2_explode(explosion) -> void:
+	var score = int(score_label.text) + 25
+	score_label.text = "%s" % score
+	explosion.scale = Vector2(3, 3)
+	explosions.add_child(explosion)
+	explosion.set_rotation_degrees(rand.randi_range(0, 359))
+	
+	explosion.explode(0.35, "V2")
+
+
 func _on_wave_timer_timeout() -> void:
 	_on_plane_spawn_timer_timeout()
 	plane_spawn_timer.start()
@@ -97,8 +107,7 @@ func _on_player_game_over() -> void:
 
 
 func _on_v_2_spawn_timer_timeout() -> void:
-	print("timer")
 	var v2 = v2_rocket.instantiate()
-	#v2.connect("explode_enemy", _on_enemy_explode)
+	v2.connect("explode_enemy", _on_v2_explode)
 	v2.position = Vector2(get_viewport_rect().size.x - 1, player.global_position.y - 46)
 	enemy_planes.add_child(v2)

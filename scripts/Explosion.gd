@@ -6,9 +6,14 @@ extends AnimatedSprite2D
 var finished_requirement: int = 2
 var finished_count: int = 0
 
-func explode(ps: float = 1.0) -> void:
-	$ExplosionSound.pitch_scale = ps
-	$ExplosionSound.play()
+func explode(ps: float = 1.0, type: String = "Enemy Plane") -> void:
+	match type:
+		"Enemy Plane":
+			$ExplosionSound.pitch_scale = ps
+			$ExplosionSound.play()
+		"V2":
+			$V2ExplosionSound.volume_db = 5
+			$V2ExplosionSound.play()
 
 
 func _physics_process(delta) -> void:

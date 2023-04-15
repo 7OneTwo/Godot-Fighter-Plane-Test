@@ -1,10 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://cj1hinpq74mfj"]
+[gd_scene load_steps=18 format=3 uid="uid://cj1hinpq74mfj"]
 
 [ext_resource type="Texture2D" uid="uid://b5xuf53cnx70f" path="res://assets/images/v2_rocket.png" id="1_e864g"]
 [ext_resource type="Script" path="res://scenes/V2Rocket.gd" id="1_koptr"]
 [ext_resource type="Texture2D" uid="uid://cu5nivpm78sn6" path="res://assets/images/v2_thrust.png" id="2_2x2tg"]
 [ext_resource type="AudioStream" uid="uid://3yxy56plnhre" path="res://assets/audio/v2_rocket.ogg" id="4_570yh"]
 [ext_resource type="Script" path="res://scripts/HitBox.gd" id="5_2fsci"]
+[ext_resource type="Script" path="res://scripts/HurtBox.gd" id="6_on8h5"]
+[ext_resource type="Script" path="res://singletons/sound_manager/sound_pool.gd" id="7_cmjju"]
+[ext_resource type="Script" path="res://singletons/sound_manager/sound_queue.gd" id="8_w6q4x"]
+[ext_resource type="AudioStream" uid="uid://cdk0b7ghq2ns5" path="res://assets/audio/ricochet-1.ogg" id="9_ykl1p"]
+[ext_resource type="AudioStream" uid="uid://mxmo6r4att68" path="res://assets/audio/ricochet-2.ogg" id="10_xwwr3"]
+[ext_resource type="AudioStream" uid="uid://do5cf2dfxhwcw" path="res://assets/audio/ricochet-3.ogg" id="11_2q8g5"]
+[ext_resource type="AudioStream" uid="uid://7ckdeor4h4y4" path="res://assets/audio/ricochet-4.ogg" id="12_nfb81"]
+[ext_resource type="AudioStream" uid="uid://cw4eqvpea08m5" path="res://assets/audio/ricochet-5.ogg" id="13_174oa"]
+[ext_resource type="AudioStream" uid="uid://ylwu83d07vjt" path="res://assets/audio/ricochet-6.ogg" id="14_ud5ur"]
+[ext_resource type="AudioStream" uid="uid://bicbualm7mfj1" path="res://assets/audio/ricochet-7.ogg" id="15_oafyg"]
+[ext_resource type="AudioStream" uid="uid://cpmifpu5g677u" path="res://assets/audio/ricochet-8.ogg" id="16_icb32"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3u7yh"]
 radius = 23.0
@@ -32,5 +43,104 @@ damage = 99
 position = Vector2(197, 48)
 rotation = -1.5708
 shape = SubResource("CapsuleShape2D_3u7yh")
+
+[node name="HurtBox" type="Area2D" parent="."]
+script = ExtResource("6_on8h5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(197, 48)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_3u7yh")
+
+[node name="RicoshetSoundPool" type="Node" parent="."]
+script = ExtResource("7_cmjju")
+
+[node name="SoundQueue" type="Node" parent="RicoshetSoundPool"]
+script = ExtResource("8_w6q4x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue"]
+stream = ExtResource("9_ykl1p")
+volume_db = -10.0
+
+[node name="AudioStreamPlayer16870" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue"]
+stream = ExtResource("9_ykl1p")
+volume_db = -10.0
+
+[node name="SoundQueue2" type="Node" parent="RicoshetSoundPool"]
+script = ExtResource("8_w6q4x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue2"]
+stream = ExtResource("10_xwwr3")
+volume_db = -10.0
+
+[node name="AudioStreamPlayer16871" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue2"]
+stream = ExtResource("10_xwwr3")
+volume_db = -10.0
+
+[node name="SoundQueue3" type="Node" parent="RicoshetSoundPool"]
+script = ExtResource("8_w6q4x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue3"]
+stream = ExtResource("11_2q8g5")
+volume_db = -10.0
+
+[node name="AudioStreamPlayer16872" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue3"]
+stream = ExtResource("11_2q8g5")
+volume_db = -10.0
+
+[node name="SoundQueue4" type="Node" parent="RicoshetSoundPool"]
+script = ExtResource("8_w6q4x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue4"]
+stream = ExtResource("12_nfb81")
+volume_db = -10.0
+
+[node name="AudioStreamPlayer16873" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue4"]
+stream = ExtResource("12_nfb81")
+volume_db = -10.0
+
+[node name="SoundQueue5" type="Node" parent="RicoshetSoundPool"]
+script = ExtResource("8_w6q4x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue5"]
+stream = ExtResource("13_174oa")
+volume_db = -10.0
+
+[node name="AudioStreamPlayer16874" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue5"]
+stream = ExtResource("13_174oa")
+volume_db = -10.0
+
+[node name="SoundQueue6" type="Node" parent="RicoshetSoundPool"]
+script = ExtResource("8_w6q4x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue6"]
+stream = ExtResource("14_ud5ur")
+volume_db = -10.0
+
+[node name="AudioStreamPlayer16875" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue6"]
+stream = ExtResource("14_ud5ur")
+volume_db = -10.0
+
+[node name="SoundQueue7" type="Node" parent="RicoshetSoundPool"]
+script = ExtResource("8_w6q4x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue7"]
+stream = ExtResource("15_oafyg")
+volume_db = -10.0
+
+[node name="AudioStreamPlayer16876" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue7"]
+stream = ExtResource("15_oafyg")
+volume_db = -10.0
+
+[node name="SoundQueue8" type="Node" parent="RicoshetSoundPool"]
+script = ExtResource("8_w6q4x")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue8"]
+stream = ExtResource("16_icb32")
+volume_db = -10.0
+
+[node name="AudioStreamPlayer16877" type="AudioStreamPlayer" parent="RicoshetSoundPool/SoundQueue8"]
+stream = ExtResource("16_icb32")
+volume_db = -10.0
 
 [connection signal="finished" from="ThrustSound" to="." method="_on_thrust_sound_finished"]

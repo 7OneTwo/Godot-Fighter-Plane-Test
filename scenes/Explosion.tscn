@@ -1,8 +1,9 @@
-[gd_scene load_steps=53 format=3 uid="uid://lua7h7r4h3dx"]
+[gd_scene load_steps=54 format=3 uid="uid://lua7h7r4h3dx"]
 
 [ext_resource type="Texture2D" uid="uid://4oog4a1s6hrb" path="res://assets/images/explosion.png" id="1_py0lb"]
 [ext_resource type="Script" path="res://scripts/Explosion.gd" id="2_qp7fo"]
 [ext_resource type="AudioStream" uid="uid://b6561183kvoy7" path="res://assets/audio/explosion.ogg" id="3_uw61i"]
+[ext_resource type="AudioStream" uid="uid://fnnudfk41k2d" path="res://assets/audio/v2_explosion.ogg" id="4_0bk3a"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6weu0"]
 atlas = ExtResource("1_py0lb")
@@ -362,5 +363,10 @@ script = ExtResource("2_qp7fo")
 stream = ExtResource("3_uw61i")
 volume_db = -8.0
 
+[node name="V2ExplosionSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_0bk3a")
+volume_db = -8.0
+
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]
 [connection signal="finished" from="ExplosionSound" to="." method="_on_explosion_sound_finished"]
+[connection signal="finished" from="V2ExplosionSound" to="." method="_on_explosion_sound_finished"]
