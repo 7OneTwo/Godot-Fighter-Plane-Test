@@ -28,7 +28,7 @@ var spawn_interval_min = 2
 var spawn_interval_max = 6
 var rand = RandomNumberGenerator.new()
 
-var score_label
+var score_label: Label
 var accuracy_label
 
 

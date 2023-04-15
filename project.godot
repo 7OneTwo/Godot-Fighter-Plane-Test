@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.0", "Forward Plus")
 boot_splash/image="res://assets/images/splash_atomic-diesel.png"
 config/icon="res://icon.svg"
 
+[debug]
+
+settings/image="res://assets/images/splash_atomic-diesel.png"
+
 [display]
 
 window/size/viewport_width=1920
