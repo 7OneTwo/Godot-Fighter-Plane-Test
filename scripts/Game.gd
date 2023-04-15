@@ -7,6 +7,7 @@ extends Node2D
 @export var plane_spawn_count_inc: int = 2
 @export var plane_starting_count: int = 15
 
+@onready var player_crates = $ParallaxBackground/PlayerCrates
 @onready var bullets = $ParallaxBackground/Bullets
 @onready var explosions = $ParallaxBackground/Explosions
 @onready var enemy_planes = $ParallaxBackground/EnemyPlanes
@@ -15,12 +16,14 @@ extends Node2D
 @onready var game_over_anim = $ParallaxBackground/GameOverAnimation
 @onready var wave_timer = $WaveTimer
 @onready var v2_spawn_timer = $V2SpawnTimer
+@onready var health_crate_timer = $HealthCrateTimer
 @onready var plane_spawn_timer = $PlaneSpawnTimer
 @onready var player = $ParallaxBackground/Path2D/PathFollow2D/Player
 @onready var hud = $HUD
 
 var enemy_plane = preload("res://scenes/EnemyPlane.tscn")
 var v2_rocket = preload("res://scenes/V2Rocket.tscn")
+var health_crate = preload("res://scenes/CrateHealth.tscn")
 
 var spawn_y_min = 40
 var spawn_y_max = 900
@@ -57,6 +60,22 @@ func _process(delta: float) -> void:
 
 func _on_health_update(health) -> void:
 	health_label.text = "%s" % health
+	spawn_health_crate()
+
+
+func spawn_health_crate() -> void:
+	if !player_crates.get_child_count():
+		health_crate_timer.start(rand.randi_range(1, 3))
+
+
+func _on_health_crate_timer_timeout() -> void:
+	var crate = health_crate.instantiate()
+	crate.position = Vector2(get_viewport_rect().size.x - 1, 0)
+	player_crates.add_child(crate)
+	crate.connect("heal", _on_heal)
+
+func _on_heal() -> void:
+	player.call("_on_heal")
 
 func _on_player_shoot(bullet) -> void:
 	bullets.add_child(bullet)
@@ -118,3 +137,4 @@ func _on_v_2_spawn_timer_timeout() -> void:
 	v2.connect("explode_enemy", _on_v2_explode)
 	v2.position = Vector2(get_viewport_rect().size.x - 1, player.global_position.y - 46)
 	enemy_planes.add_child(v2)
+

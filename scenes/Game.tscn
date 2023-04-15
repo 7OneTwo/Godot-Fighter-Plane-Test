@@ -98,6 +98,8 @@ loop = false
 process_mode = 1
 position = Vector2(-0.475677, -0.879669)
 
+[node name="PlayerCrates" type="Node2D" parent="ParallaxBackground"]
+
 [node name="Bullets" type="Node2D" parent="ParallaxBackground"]
 
 [node name="Explosions" type="Node2D" parent="ParallaxBackground"]
@@ -209,6 +211,9 @@ wait_time = 2.0
 [node name="V2SpawnTimer" type="Timer" parent="."]
 wait_time = 40.0
 
+[node name="HealthCrateTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="HUD" parent="." instance=ExtResource("10_mvq0e")]
 visible = false
 
@@ -218,3 +223,4 @@ visible = false
 [connection signal="timeout" from="WaveTimer" to="." method="_on_wave_timer_timeout"]
 [connection signal="timeout" from="PlaneSpawnTimer" to="." method="_on_plane_spawn_timer_timeout"]
 [connection signal="timeout" from="V2SpawnTimer" to="." method="_on_v_2_spawn_timer_timeout"]
+[connection signal="timeout" from="HealthCrateTimer" to="." method="_on_health_crate_timer_timeout"]

@@ -123,6 +123,14 @@ func jam_fire() -> void:
 	jam_sound.play_sound()
 	cooldown_timer.start(cooldown_time)
 
+
+func _on_heal() -> void:
+	print("Player :: _on_heal()")
+	current_health = health
+	engine_smoke.emitting = false
+	emit_signal("health_update", current_health)
+	
+
 func take_damage(amount: int, body: Area2D) -> void:
 	if body.get_parent().is_in_group("Player") or body.get_parent().is_in_group("Player Bullets"):
 		return

@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3 uid="uid://b886k2xlkwadk"]
+
+[ext_resource type="Texture2D" uid="uid://cvg4lk6hn6pjs" path="res://assets/images/crate_health.png" id="1_0u1ts"]
+[ext_resource type="Script" path="res://scripts/CrateHealth.gd" id="2_ue7vu"]
+[ext_resource type="Script" path="res://scripts/HurtBox.gd" id="2_w4871"]
+[ext_resource type="AudioStream" uid="uid://f07thl1wfvgy" path="res://assets/audio/reward_health.ogg" id="4_jdrcr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mmmg4"]
+size = Vector2(58.9386, 54.4659)
+
+[sub_resource type="Animation" id="Animation_eikiq"]
+resource_name = "fade_out"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7cqyk"]
+_data = {
+"fade_out": SubResource("Animation_eikiq")
+}
+
+[node name="CrateHealth" type="Sprite2D" groups=["Player Crates"]]
+position = Vector2(104, 272)
+rotation = 0.0383972
+texture = ExtResource("1_0u1ts")
+script = ExtResource("2_ue7vu")
+
+[node name="HurtBox" type="Area2D" parent="."]
+script = ExtResource("2_w4871")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(20.7124, 237.035)
+shape = SubResource("RectangleShape2D_mmmg4")
+
+[node name="FadeOut" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_7cqyk")
+}
+
+[node name="RewardSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_jdrcr")
+volume_db = 10.0
+
+[connection signal="animation_finished" from="FadeOut" to="." method="_on_fade_out_animation_finished"]
