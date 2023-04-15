@@ -29,20 +29,24 @@ var spawn_interval_max = 6
 var rand = RandomNumberGenerator.new()
 
 var score_label: Label
+var health_label: Label
 var accuracy_label
 
 
 func _ready() -> void:
 	rand.randomize()
 	score_label = hud.get_node("%ScoreLabel")
+	health_label = hud.get_node("%HealthLabel")
 	accuracy_label = hud.get_node("%AccuracyLabel")
 	player.get_tree().paused = true
+	player.connect("health_update", _on_health_update)
 
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("fire") and game_start.visible:
 		hud.visible = true
 		game_start.visible = false
+		health_label.text = "5"
 		player.get_tree().paused = false
 		wave_timer.start()
 		v2_spawn_timer.start()
@@ -51,6 +55,8 @@ func _process(delta: float) -> void:
 		hud.visible = false
 		get_tree().reload_current_scene()
 
+func _on_health_update(health) -> void:
+	health_label.text = "%s" % health
 
 func _on_player_shoot(bullet) -> void:
 	bullets.add_child(bullet)

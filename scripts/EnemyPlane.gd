@@ -50,8 +50,8 @@ func _ready() -> void:
 	engine_animation.play("approach")
 	engine_sound.play()
 	
-	if rand.randi_range(1, 3) == 1:
-		fire_delay_timer.start(rand.randi_range(1, 4))
+	if rand.randi_range(1, 2) == 1:
+		fire_delay_timer.start(rand.randi_range(1, 5))
 	
 
 func _process(delta: float) -> void:

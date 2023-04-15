@@ -1,5 +1,6 @@
 extends Sprite2D
 
+signal health_update(health)
 signal shoot(bullet)
 signal explode_player(explosion)
 signal game_over()
@@ -41,6 +42,7 @@ var intro_speed: float = 200
 
 func _ready() -> void:
 	current_health = health
+	emit_signal("health_update", current_health)
 	is_intro_complete = false
 	bullet_count = jam_count
 	is_going_down = false;
@@ -126,6 +128,10 @@ func take_damage(amount: int, body: Area2D) -> void:
 		return
 	
 	current_health -= amount
+	if current_health < 0:
+		current_health = 0
+		
+	emit_signal("health_update", current_health)
 	richochet_sound.play_random_sound()
 
 	if current_health < health:
